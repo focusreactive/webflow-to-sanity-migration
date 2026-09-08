@@ -56,7 +56,8 @@ function schemaTypeName(value: string): string {
     .split("-")
     .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
     .join("");
-  return pascal.charAt(0).toLowerCase() + pascal.slice(1);
+  const camel = pascal.charAt(0).toLowerCase() + pascal.slice(1);
+  return /^[0-9]/.test(camel) ? `_${camel}` : camel;
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {

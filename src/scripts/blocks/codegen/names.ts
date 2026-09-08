@@ -1,11 +1,17 @@
 import { type BlockTypeId } from "#ir/common.ts";
 
+function ensureValidIdentifierStart(value: string): string {
+  return /^[0-9]/.test(value) ? `_${value}` : value;
+}
+
 export function blockComponentName(id: BlockTypeId): string {
-  return String(id)
-    .split(/[^a-z0-9]+/i)
-    .filter(Boolean)
-    .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
-    .join("");
+  return ensureValidIdentifierStart(
+    String(id)
+      .split(/[^a-z0-9]+/i)
+      .filter(Boolean)
+      .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
+      .join(""),
+  );
 }
 
 export function blockDirName(id: BlockTypeId): string {
@@ -28,9 +34,11 @@ export function kebabCase(value: string): string {
 const parts = (value: string): string[] => kebabCase(value).split("-");
 
 const pascal = (value: string): string =>
-  parts(value)
-    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-    .join("");
+  ensureValidIdentifierStart(
+    parts(value)
+      .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+      .join(""),
+  );
 
 const camel = (value: string): string => {
   const value_ = pascal(value);
@@ -45,10 +53,7 @@ export const propsInterfaceName = (id: string): string => `${pascal(id)}Props`;
 export const richTextWrapperName = (field: string): string => `RichText${pascal(field)}`;
 export const richTextWrapperFile = (field: string): string => `rich-text-${kebabCase(field)}.tsx`;
 
-export function duplicateNameWarnings(
-  entries: readonly { label: string; name: string }[],
-  subject: string,
-): string[] {
+export function duplicateNameWarnings(entries: readonly { label: string; name: string }[], subject: string): string[] {
   const groups = new Map<string, string[]>();
   for (const { label, name } of entries) {
     const group = groups.get(name);
@@ -66,11 +71,7 @@ export function duplicateNameWarnings(
   return warnings;
 }
 
-export function collisionWarnings(
-  ids: readonly string[],
-  nameFor: (id: string) => string,
-  subject: string,
-): string[] {
+export function collisionWarnings(ids: readonly string[], nameFor: (id: string) => string, subject: string): string[] {
   return duplicateNameWarnings(
     ids.map((id) => ({ label: `block id "${id}"`, name: nameFor(id) })),
     subject,

@@ -86,7 +86,13 @@ export function emitDetailRoute(entry: DetailRouteEntry, ctx: DetailRouteCtx): s
         `import ${pascalCase(binding.sectionId)} from "@/components/collections/${entry.key}/sections/${pascalCase(binding.sectionId)}";`,
     )
     .join("\n");
-  const sections = entry.template.map((binding) => `      <${pascalCase(binding.sectionId)} doc={doc} />`).join("\n");
+
+  const sections = entry.template
+    .map(
+      (binding) =>
+        `      <${pascalCase(binding.sectionId)} {...(doc as unknown as PropsOf<typeof ${pascalCase(binding.sectionId)}>)} />`,
+    )
+    .join("\n");
 
   const titleLine = metaLine("doc", entry.pageBinding.meta.title);
   const descriptionLine = metaLine("doc", entry.pageBinding.meta.description);
@@ -99,6 +105,13 @@ import { sanityFetch } from "@/sanity/live";
 import { ${byslugConst}, ${slugsConst} } from "@/sanity/queries";
 
 ${imports}
+
+type PropsOf<F> =
+  F extends (...args: infer A) => unknown ?
+    A extends [infer P, ...unknown[]] ?
+      P
+    : Record<string, never>
+  : Record<string, never>;
 
 interface Args {
   params: Promise<{ slug: string }>;

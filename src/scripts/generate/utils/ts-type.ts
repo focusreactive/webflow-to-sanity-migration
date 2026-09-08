@@ -34,9 +34,12 @@ export function sanityTsType(type: FieldType): string {
       return "{ _id: string } & Record<string, unknown>";
     case "multiReference":
       return "({ _id: string } & Record<string, unknown>)[]";
-    case "array":
+    case "array": {
       if (type.element.type === "richText") return "PortableTextBlock[]";
-      return `${sanityTsType(type.element)}[]`;
+      const elementType = sanityTsType(type.element);
+      const needsParens = type.element.type === "option";
+      return needsParens ? `(${elementType})[]` : `${elementType}[]`;
+    }
     case "group":
       return `{ ${type.fields
         .map((field) => `${propKey(field.name)}${field.required ? "" : "?"}: ${sanityTsType(field.type)}`)

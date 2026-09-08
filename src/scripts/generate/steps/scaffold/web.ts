@@ -89,10 +89,23 @@ function rewriteRichTextImportSpecifiers(code: string): string {
   });
 }
 
+const REACT_HOOK_CALL = /\buse[A-Z]\w*\s*\(/;
+const JSX_EVENT_HANDLER_PROP = /\bon[A-Z]\w*=\{/;
+
+function needsClientDirective(code: string): boolean {
+  return REACT_HOOK_CALL.test(code) || JSX_EVENT_HANDLER_PROP.test(code);
+}
+
+function ensureClientDirective(code: string): string {
+  if (DIRECTIVE_PROLOGUE.test(code)) return code;
+  if (!needsClientDirective(code)) return code;
+  return `"use client";\n\n${code}`;
+}
+
 function rewriteRelativeTsImports(code: string): string {
   const richTextRewritten = rewriteRichTextImportSpecifiers(code);
   const rewritten = richTextRewritten.replace(/(from\s+["'])(\.{1,2}\/[^"']*)\.tsx?(["'])/g, "$1$2$3");
-  return ensureJsxNamespaceImport(rewritten);
+  return ensureClientDirective(ensureJsxNamespaceImport(rewritten));
 }
 
 function detailRoutePath(routePattern: string): string {

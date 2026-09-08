@@ -111,7 +111,8 @@ function chromeProjection(global: Pick<GlobalDef, "name" | "fields">, ctx: Query
 }
 
 function screamingSnakeCase(value: string): string {
-  return kebabCase(value).toUpperCase().replace(/-/g, "_");
+  const result = kebabCase(value).toUpperCase().replace(/-/g, "_");
+  return /^[0-9]/.test(result) ? `_${result}` : result;
 }
 
 export function chromeQueryConstName(name: string): string {

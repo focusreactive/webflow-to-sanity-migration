@@ -26,32 +26,20 @@ export function emitPresentationResolve(entries: readonly PresentationCollection
   const collectionLocations = entries.map(collectionLocation).join("\n");
   return `import { defineLocations, type PresentationPluginOptions } from "sanity/presentation";
 
-import { routablePaths, type PageTreeNode } from "./page-tree";
-
-const PAGE_TREE_QUERY = \`*[_type == "page"]{ _id, slug, "parentId": parent._ref, isContainer }\`;
-
-async function resolvePageHref(
-  getClient: (options: { apiVersion: string }) => { fetch: <T>(query: string) => Promise<T> },
-  id: string | undefined,
-): Promise<string> {
-  if (id === undefined) return "/";
-  const client = getClient({ apiVersion: "2024-01-01" });
-  const nodes = await client.fetch<PageTreeNode[]>(PAGE_TREE_QUERY);
-  const routable = routablePaths(nodes);
-  for (const [path, nodeId] of routable) {
-    if (nodeId === id) return path === "" ? "/" : \`/\${path}\`;
-  }
-  return "/";
-}
-
+// "page" documents can be nested (see page-tree.ts / the parent/child chain built at build
+// time), so the correct href for one generally depends on its ancestors — data this resolver
+// cannot fetch, because it must stay synchronous and single-argument (see the note in
+// collectionLocation below). This falls back to a flat, top-level href from the page's own
+// slug; a nested page's "open in Presentation" location will point at the wrong URL until this
+// is rebuilt on the async, documentStore-based top-level resolver form Sanity's Presentation
+// tool supports for exactly this case.
 export const resolve: PresentationPluginOptions["resolve"] = {
   locations: {
     page: defineLocations({
       select: { title: "title", slug: "slug.current" },
-      resolve: async (doc, { getClient }) => {
-        const href = await resolvePageHref(getClient, doc?._id);
-        return { locations: [{ title: doc?.title ?? "Untitled", href }] };
-      },
+      resolve: (doc) => ({
+        locations: [{ title: doc?.title ?? "Untitled", href: \`/\${doc?.slug ?? ""}\` }],
+      }),
     }),
 ${collectionLocations}
   },
