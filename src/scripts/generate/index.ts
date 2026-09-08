@@ -1,20 +1,33 @@
 import { CliUsageError, parseServiceArgs } from "#lib/cli/index.ts";
 
-import { runGate } from "./steps/index.ts";
+import { runGate, runSanityPreflight, runScaffold } from "./steps/index.ts";
 import { parseGateName } from "./utils/parse-gate-name.ts";
 
 async function main(): Promise<void> {
   const args = parseServiceArgs(process.argv.slice(2), {
     extraFlags: {
+      preflight: { type: "boolean" },
+      scaffold: { type: "boolean" },
       gate: { type: "string" },
     },
   });
+
+  if (args["preflight"] === true) {
+    const problems = await runSanityPreflight({ projectPath: args.projectPath });
+    process.stdout.write(`${JSON.stringify({ step: "generate:preflight", problems })}\n`);
+    if (problems.length > 0) throw new Error(`preflight found ${String(problems.length)} problem(s)`);
+    return;
+  }
+
+  if (args["scaffold"] === true) {
+    return runScaffold({ projectPath: args.projectPath, force: args.force });
+  }
 
   if (typeof args["gate"] === "string") {
     return runGate({ projectPath: args.projectPath, gate: parseGateName(args["gate"]), force: args.force });
   }
 
-  throw new CliUsageError("--gate <name> is required");
+  throw new CliUsageError("one of --preflight | --scaffold | --gate <name> is required");
 }
 
 try {

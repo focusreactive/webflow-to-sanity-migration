@@ -14,5 +14,6 @@ demo/node_modules/
 demo/.next/
 demo/*.db
 
-# Scratch dirs created and removed by tests/unit/scripts/generate/deliverable-typecheck.test.ts
+# Scratch dirs created and removed by
+# tests/unit/scripts/generate/steps/scaffold/emit-deliverable-typecheck.test.ts
 .tmp-deliverable-typecheck-*/

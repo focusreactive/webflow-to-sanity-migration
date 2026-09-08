@@ -45,7 +45,7 @@ export async function executeGate(args: { projectPath: string; gate: GateName; e
     });
 
     if (result.timedOut === true) {
-      const fallback = timeoutFallbackFile();
+      const fallback = timeoutFallbackFile(args.gate);
       if (fallback !== undefined && existsSync(join(args.projectPath, fallback))) {
         note = `pnpm ${command.join(" ")} timed out but ${fallback} exists — treated as success`;
         continue;
