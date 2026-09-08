@@ -1,5 +1,5 @@
-import { helpersImportLine } from "#generate/steps/scaffold/define-wrap.ts";
-import { raw, renderSource, type SourceValue } from "#generate/utils/source.ts";
+import { helpersImportLine } from "./define-wrap.ts";
+import { raw, renderSource, type SourceValue } from "./source.ts";
 
 export interface PtStyleEntry {
   tag: string;

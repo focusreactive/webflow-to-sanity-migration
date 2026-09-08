@@ -1,10 +1,10 @@
 import { schemaTypeName, titleCase } from "#blocks/codegen/names.ts";
 import { sanityField, type SanityFieldCtx } from "#generate/sanity-field.ts";
-import { renderSource, type SourceValue } from "#generate/utils/source.ts";
+import { renderSource, type SourceValue } from "#generate/deliverable/shared/source.ts";
 import type { CollectionEntry } from "#ir/collections.ts";
 import type { GlobalDef } from "#ir/globals.ts";
 
-import { helpersImportLine, wrapTopLevelFields } from "./define-wrap.ts";
+import { helpersImportLine, wrapTopLevelFields } from "#generate/deliverable/shared/define-wrap.ts";
 import { buildDocumentPreview } from "./preview.ts";
 
 export function emitDocument(typeName: string, title: string, fields: SourceValue[], preview?: SourceValue): string {

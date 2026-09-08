@@ -1,4 +1,4 @@
-import { raw, type SourceValue } from "#generate/utils/source.ts";
+import { raw, type SourceValue } from "#generate/deliverable/shared/source.ts";
 
 export interface PreviewFieldLike {
   name: string;

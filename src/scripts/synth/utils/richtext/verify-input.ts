@@ -1,6 +1,6 @@
 import type { FieldType } from "#ir/field-type.ts";
 
-import { htmlToPortableText } from "./html-to-portable-text.ts";
+import { htmlToPortableText } from "#generate/deliverable/shared/html-to-portable-text.ts";
 
 export interface ResolveRichTextOpts {
   resolveImgSrc: (url: string) => string | undefined;

@@ -1,4 +1,4 @@
-import { raw, renderSource, type SourceValue } from "#generate/utils/source.ts";
+import { raw, renderSource, type SourceValue } from "./source.ts";
 
 interface WrapFlags {
   arrayMember: boolean;

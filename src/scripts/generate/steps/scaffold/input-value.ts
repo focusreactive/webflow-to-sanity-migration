@@ -1,9 +1,9 @@
 import type { InputResolvers } from "#generate/types.ts";
 import { assetIdFromCanonicalUrl } from "#ir/assets.ts";
 import type { FieldType } from "#ir/field-type.ts";
-import { htmlToPortableText } from "#synth/utils/richtext/html-to-portable-text.ts";
+import { htmlToPortableText } from "#generate/deliverable/shared/html-to-portable-text.ts";
 
-import { sanityColorValue } from "./color.ts";
+import { sanityColorValue } from "#generate/deliverable/shared/color.ts";
 import { SANITY_ASSET_ROUTE_PREFIX } from "./url-for.ts";
 
 type AssetMeta = NonNullable<ReturnType<InputResolvers["assetMeta"]>>;

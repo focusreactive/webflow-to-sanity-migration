@@ -1,4 +1,4 @@
-import { sanityColorValue } from "#generate/steps/scaffold/color.ts";
+import { sanityColorValue } from "#generate/deliverable/shared/color.ts";
 
 describe("sanityColorValue", () => {
   it("converts a hex colour into sanity's colour object, lowercased", () => {

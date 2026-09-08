@@ -1,5 +1,5 @@
 import { schemaTypeName, titleCase } from "#blocks/codegen/names.ts";
-import { raw, type SourceValue } from "#generate/utils/source.ts";
+import { raw, type SourceValue } from "#generate/deliverable/shared/source.ts";
 import type { FieldType, GroupField } from "#ir/field-type.ts";
 
 export interface SanityFieldCtx {

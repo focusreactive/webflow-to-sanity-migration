@@ -3,7 +3,7 @@ import {
   buildDocumentPreview,
   type PreviewFieldLike,
 } from "#generate/steps/scaffold/preview.ts";
-import { renderSource } from "#generate/utils/source.ts";
+import { renderSource } from "#generate/deliverable/shared/source.ts";
 
 const field = (name: string, type: string): PreviewFieldLike => ({ name, type: { type } });
 

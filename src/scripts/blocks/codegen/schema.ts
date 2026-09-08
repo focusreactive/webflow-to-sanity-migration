@@ -1,8 +1,8 @@
 import { schemaTypeName } from "#blocks/codegen/names.ts";
 import { sanityField, type SanityFieldCtx } from "#generate/sanity-field.ts";
-import { helpersImportLine, wrapTopLevelFields } from "#generate/steps/scaffold/define-wrap.ts";
+import { helpersImportLine, wrapTopLevelFields } from "#generate/deliverable/shared/define-wrap.ts";
 import { buildBlockPreview } from "#generate/steps/scaffold/preview.ts";
-import { renderSource, type SourceValue } from "#generate/utils/source.ts";
+import { renderSource, type SourceValue } from "#generate/deliverable/shared/source.ts";
 import type { BlockType } from "#ir/blocks.ts";
 
 export function emitBlockSchema(block: BlockType, ctx: SanityFieldCtx): string {

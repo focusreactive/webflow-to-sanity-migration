@@ -3,6 +3,15 @@ import type { CollectionId } from "#ir/common.ts";
 import type { ContentRecord } from "#ir/content.ts";
 import type { FieldType } from "#ir/field-type.ts";
 
+import type { OverlayDraft } from "./steps/scaffold/overlay.ts";
+
+export interface ScaffoldCtx {
+  projectPath: string;
+  draft: OverlayDraft;
+  warn: (message: string) => void;
+  configRoot?: string;
+}
+
 export type SlugResolver = (collectionKey: string) => string;
 
 export interface SurfaceShard {

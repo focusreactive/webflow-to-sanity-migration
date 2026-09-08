@@ -1,4 +1,4 @@
-import { PT_DECORATORS, PT_LINK_ANNOTATION, PT_LISTS, PT_STYLES } from "./portable-text.ts";
+import { PT_DECORATORS, PT_LINK_ANNOTATION, PT_LISTS, PT_STYLES } from "#generate/deliverable/shared/portable-text.ts";
 
 const TAG_BY_STYLE = new Map(PT_STYLES.map((entry) => [entry.value, entry.tag]));
 const CONTAINER_TAG_BY_LIST_VALUE = new Map(PT_LISTS.map((entry) => [entry.value, entry.containerTag]));

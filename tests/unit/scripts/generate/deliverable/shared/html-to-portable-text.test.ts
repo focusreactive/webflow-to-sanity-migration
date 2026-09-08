@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { htmlToPortableText } from "#synth/utils/richtext/html-to-portable-text.ts";
+import { htmlToPortableText } from "#generate/deliverable/shared/html-to-portable-text.ts";
 import { richTextTagsUsed } from "#synth/utils/richtext/tags-used.ts";
 
 const noImages = { resolveImage: () => undefined };

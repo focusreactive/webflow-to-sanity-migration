@@ -1,10 +1,10 @@
 import { schemaTypeName } from "#blocks/codegen/names.ts";
 import { sanityField, type SanityFieldCtx } from "#generate/sanity-field.ts";
-import { raw, renderSource, type SourceValue } from "#generate/utils/source.ts";
+import { raw, renderSource, type SourceValue } from "#generate/deliverable/shared/source.ts";
 import type { CollectionId } from "#ir/common.ts";
 import type { GroupField } from "#ir/field-type.ts";
 
-import { helpersImportLine } from "./define-wrap.ts";
+import { helpersImportLine } from "#generate/deliverable/shared/define-wrap.ts";
 import { emitDocument } from "./document-schema.ts";
 import { buildDocumentPreview } from "./preview.ts";
 
