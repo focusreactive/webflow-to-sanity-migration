@@ -61,7 +61,9 @@ describe("emitDetailRoute", () => {
 
     expect(source).toContain('import Hero from "@/components/collections/blog-posts/sections/Hero";');
     expect(source).toContain('import BodyCopy from "@/components/collections/blog-posts/sections/BodyCopy";');
-    expect(source.indexOf("<Hero doc={doc} />")).toBeLessThan(source.indexOf("<BodyCopy doc={doc} />"));
+    expect(source.indexOf("<Hero {...(doc as unknown as PropsOf<typeof Hero>)} />")).toBeLessThan(
+      source.indexOf("<BodyCopy {...(doc as unknown as PropsOf<typeof BodyCopy>)} />"),
+    );
   });
 
   it("wires generateMetadata to the page binding's meta fields", () => {
