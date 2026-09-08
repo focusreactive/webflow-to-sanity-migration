@@ -7,7 +7,7 @@ import { buildColorCandidates } from "./color-match.ts";
 import { emitRichTextWrapper } from "./emit-wrapper.ts";
 import { styleTableFromMeasured } from "./extract-styles.ts";
 import { extrapolateTable } from "./extrapolate.ts";
-import { richTextWrapperFile } from "./names.ts";
+import { synthRichTextWrapperPath } from "./names.ts";
 import { planRichText, richTextFieldNames } from "./plan.ts";
 import type { RichTextField } from "./types.ts";
 
@@ -30,7 +30,7 @@ export async function emitRichTextWrappers(opts: EmitWrappersOpts): Promise<stri
   for (const name of names) {
     const table = styleTableFromMeasured(opts.measured[name] ?? {}, candidates);
     const extrapolated = extrapolateTable(table);
-    const file = join(opts.outDir, richTextWrapperFile(name));
+    const file = join(opts.outDir, synthRichTextWrapperPath(name));
     await mkdir(dirname(file), { recursive: true });
     await writeFile(file, emitRichTextWrapper(name, extrapolated));
     written.push(name);

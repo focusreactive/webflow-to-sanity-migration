@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "provenance": "ai",
+  "data": {
+    "assets": [
+      {
+        "assetId": "a1b2c3d4e5f60718",
+        "kind": "image",
+        "canonicalUrl": "https://cdn.prod.website-files.com/000000000000000000000000_hero.png",
+        "status": "downloaded",
+        "sources": [
+          "img-src"
+        ],
+        "storePath": "assets/hero.png",
+        "contentSha256": "a4bcd7b80c65e14e3809783fc4c587ce66a995dcc142e25bf61c9337ef6f3443",
+        "contentType": "image/png",
+        "fileName": "hero.png"
+      }
+    ]
+  }
+}

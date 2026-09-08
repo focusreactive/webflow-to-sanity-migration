@@ -3,7 +3,11 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 
 import { createServer, type Plugin, type ViteDevServer } from "vite";
 
+import { SANITY_ASSET_ROUTE_PREFIX } from "#generate/steps/scaffold/url-for.ts";
 import { CliUsageError, parseServiceArgs } from "#lib/cli/index.ts";
+import { buildAssetPathBySha, readAssetsData } from "#synth/steps/input-build/utils/media-input.ts";
+
+import { createAssetHandler } from "./asset-handler.ts";
 
 export interface HarnessServer {
   origin: string;
@@ -28,13 +32,23 @@ function healthCheckPlugin(): Plugin {
   };
 }
 
+function assetRoutePlugin(projectDir: string): Plugin {
+  return {
+    name: "harness:assets",
+    async configureServer(server) {
+      const pathBySha = buildAssetPathBySha(projectDir, await readAssetsData(projectDir));
+      server.middlewares.use(SANITY_ASSET_ROUTE_PREFIX, createAssetHandler(pathBySha));
+    },
+  };
+}
+
 export async function startHarness(projectDir: string): Promise<HarnessServer> {
   process.env.MIGRATE_PROJECT = projectDir;
 
   const server: ViteDevServer = await createServer({
     configFile: CONFIG,
     server: { port: 0 },
-    plugins: [healthCheckPlugin()],
+    plugins: [healthCheckPlugin(), assetRoutePlugin(projectDir)],
   });
   await server.listen();
 

@@ -8,14 +8,18 @@ import {
   loadWebFonts,
   loadWebGlobals,
   readOptional,
+  writePageTreeArtifact,
 } from "#generate/steps/scaffold/utils/emit-deliverable.ts";
 import { artifactPath, readArtifact } from "#ir/artifact.ts";
 import { blockTypeSchema } from "#ir/blocks.ts";
 import { collectionEntrySchema, collectionsArtifact } from "#ir/collections.ts";
 import { globalDefSchema } from "#ir/globals.ts";
+import { LAYOUT_SCHEMA_VERSION, layoutRouteArtifactFor } from "#ir/layout.ts";
+import { pagesDataSchema } from "#ir/pages.ts";
 import { FONT_ASSETS_DIR, FONTS_CSS_RELATIVE_PATH } from "#lib/snapshot-store/fonts.ts";
 import { SNAPSHOT_DIR } from "#lib/snapshot-store/paths.ts";
 import { synthEntryDir } from "#lib/synth-store/paths.ts";
+import { routeDir } from "#lib/route-dir.ts";
 
 const BLOCK = blockTypeSchema.parse({ id: "hero", name: "Hero", content: {}, fields: [] });
 const GLOBAL = globalDefSchema.parse({ name: "header", fields: [], values: {} });
@@ -172,5 +176,55 @@ describe("readOptional", () => {
 
   it("rethrows an error that carries no ENOENT code rather than swallowing it", async () => {
     await expect(readOptional(() => Promise.reject(new Error("no artifact")))).rejects.toThrow("no artifact");
+  });
+});
+
+const PAGES = pagesDataSchema.parse({
+  pages: [{ route: "/about", kind: "static", sources: ["sitemap"] }],
+  collections: [],
+});
+
+async function stageRouteArtifact(projectPath: string, route: string, content: string): Promise<void> {
+  const file = artifactPath(projectPath, layoutRouteArtifactFor(routeDir(route)));
+  await mkdir(join(file, ".."), { recursive: true });
+  await writeFile(file, content);
+}
+
+describe("writePageTreeArtifact", () => {
+  it("warns when a static route's layout artifact genuinely does not exist (ENOENT)", async () => {
+    const projectPath = await project();
+    const warnings: string[] = [];
+
+    await writePageTreeArtifact({ projectPath, pages: PAGES, warn: (message) => warnings.push(message) });
+
+    expect(warnings).toEqual([
+      'static route "/about": layout/routes artifact missing — the page will be seeded with no content',
+    ]);
+  });
+
+  it("does not report a malformed present artifact as missing", async () => {
+    const projectPath = await project();
+    await stageRouteArtifact(projectPath, "/about", "{ not valid json\n");
+    const warnings: string[] = [];
+
+    await expect(
+      writePageTreeArtifact({ projectPath, pages: PAGES, warn: (message) => warnings.push(message) }),
+    ).rejects.toThrow(/Invalid NDJSON record/);
+    expect(warnings).toEqual([]);
+  });
+
+  it("does not report a schemaVersion mismatch as missing", async () => {
+    const projectPath = await project();
+    await stageRouteArtifact(
+      projectPath,
+      "/about",
+      `${JSON.stringify({ kind: "meta", schemaVersion: LAYOUT_SCHEMA_VERSION + 1, provenance: "ai" })}\n`,
+    );
+    const warnings: string[] = [];
+
+    await expect(
+      writePageTreeArtifact({ projectPath, pages: PAGES, warn: (message) => warnings.push(message) }),
+    ).rejects.toThrow(/schemaVersion/);
+    expect(warnings).toEqual([]);
   });
 });

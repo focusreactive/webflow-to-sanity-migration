@@ -199,9 +199,10 @@ sections a route ought to have, so acceptance can only check the sections that
 were reported, never that none was skipped.
 
 This is the same recognised gap the discovery phase carries for its globals and
-blocks judgements, and the way out is the same one measured in
-`docs/investigations/2026-08-30-discovery-frame-resolution.md`. It changes the
-phase's logic and is deliberately deferred.
+blocks judgements, and the way out is the same one described there: the model
+names a band on the screenshot, and a script resolves that band to the node ids
+inside it, which makes the subject finite, printable inline and checkable. It
+changes the phase's logic and is deliberately deferred.
 
 One consequence to keep in mind while it stands: `discovery/blocks.json` already
 holds the per-route section inventory, but this phase does not feed it to the

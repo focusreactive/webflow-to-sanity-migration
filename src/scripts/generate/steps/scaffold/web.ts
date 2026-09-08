@@ -14,6 +14,7 @@ import type { BlockType } from "#ir/blocks.ts";
 import type { CollectionEntry } from "#ir/collections.ts";
 import type { GlobalDef } from "#ir/globals.ts";
 import { rewriteFontUrls } from "#lib/snapshot-store/fonts.ts";
+import { synthRichTextImportPattern } from "#synth/utils/richtext/names.ts";
 import type { DesignTokensData } from "#tokens/schemas/design-tokens.ts";
 
 import { DELIVERABLE_SRC_DIR } from "../../constants/dirs.ts";
@@ -81,10 +82,8 @@ function ensureJsxNamespaceImport(code: string): string {
   return `${directive}${jsxImport}${code.slice(directive.length)}`;
 }
 
-const RELATIVE_RICHTEXT_IMPORT = /(from\s+["'])\.\/richtext\/([^"'/]+?)(?:\.tsx?)?(["'])/g;
-
 function rewriteRichTextImportSpecifiers(code: string): string {
-  return code.replace(RELATIVE_RICHTEXT_IMPORT, (_match, prefix: string, field: string, suffix: string) => {
+  return code.replace(synthRichTextImportPattern(), (_match, prefix: string, field: string, suffix: string) => {
     const fileName = richTextWrapperFile(field).replace(/\.tsx$/, "");
     return `${prefix}./${fileName}${suffix}`;
   });

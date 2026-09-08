@@ -2,9 +2,8 @@ import { mkdir, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 
 import type { CollectionId } from "#ir/common.ts";
-import type { ContentRecord } from "#ir/content.ts";
 import { synthEntryDir } from "#lib/synth-store/paths.ts";
-import { buildDocIndex, docResolver, resolveDocRecord } from "#synth/steps/input-build/utils/doc-input.ts";
+import { buildDocIndex, docResolver } from "#synth/steps/input-build/utils/doc-input.ts";
 
 import { synthProject } from "../../../fixtures/synth.ts";
 
@@ -85,62 +84,5 @@ describe("buildDocIndex / docResolver", () => {
     await writeContent(root, postKey, [{ id: "post-a", _provenance: "ai", title: "Changed" }]);
 
     expect(docResolver(index)(postKey, "post-a")["title"]).toBe("Original");
-  });
-});
-
-describe("resolveDocRecord", () => {
-  const docs: Record<string, ContentRecord> = {
-    "post-a": { id: "post-a", _provenance: "ai", title: "Post A" },
-    "post-b": { id: "post-b", _provenance: "ai", title: "Post B" },
-  };
-  const resolveDoc = (collectionKey: CollectionId, id: string): ContentRecord => {
-    expect(collectionKey).toBe(postKey);
-    const doc = docs[id];
-    if (doc === undefined) throw new Error(`unexpected id ${id}`);
-    return doc;
-  };
-
-  it("resolves a reference field into the referenced document", () => {
-    const out = resolveDocRecord(
-      [{ name: "author", type: { type: "reference", collectionKey: postKey } }],
-      { author: "post-a" },
-      resolveDoc,
-    );
-    expect(out).toEqual({ author: docs["post-a"] });
-  });
-
-  it("resolves a multiReference field into its documents, in the order the ids were stored", () => {
-    const out = resolveDocRecord(
-      [{ name: "related", type: { type: "multiReference", collectionKey: postKey } }],
-      { related: ["post-b", "post-a"] },
-      resolveDoc,
-    );
-    expect(out).toEqual({ related: [docs["post-b"], docs["post-a"]] });
-  });
-
-  it("leaves an absent reference value alone rather than resolving it", () => {
-    const fields = [{ name: "author", type: { type: "reference" as const, collectionKey: postKey } }];
-    expect(resolveDocRecord(fields, { author: null }, resolveDoc)).toEqual({ author: null });
-    expect(resolveDocRecord(fields, {}, resolveDoc)).toEqual({});
-  });
-
-  it("resolves references nested inside an array of groups", () => {
-    const out = resolveDocRecord(
-      [
-        {
-          name: "cards",
-          type: {
-            type: "array",
-            element: {
-              type: "group",
-              fields: [{ name: "post", type: { type: "reference", collectionKey: postKey }, required: true }],
-            },
-          },
-        },
-      ],
-      { cards: [{ post: "post-a" }, { post: "post-b" }] },
-      resolveDoc,
-    );
-    expect(out).toEqual({ cards: [{ post: docs["post-a"] }, { post: docs["post-b"] }] });
   });
 });

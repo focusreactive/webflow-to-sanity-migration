@@ -1,5 +1,6 @@
 import type { InputResolvers } from "#generate/types.ts";
 import { assetIdFromCanonicalUrl } from "#ir/assets.ts";
+import type { CollectionId } from "#ir/common.ts";
 import type { FieldType } from "#ir/field-type.ts";
 import { htmlToPortableText } from "#generate/deliverable/shared/html-to-portable-text.ts";
 
@@ -61,9 +62,43 @@ function resolveColorValue(value: unknown): unknown {
   return converted.kind === "empty" ? undefined : converted.value;
 }
 
+function resolveRecordFields(
+  fields: readonly { name: string; type: FieldType }[],
+  record: Record<string, unknown>,
+  res: InputResolvers,
+): Record<string, unknown> {
+  const out: Record<string, unknown> = { ...record };
+  for (const field of fields) {
+    if (field.name in record) out[field.name] = resolveNode(field.type, record[field.name], res);
+  }
+  return out;
+}
+
+function resolveDocFields(collectionKey: CollectionId, doc: Record<string, unknown>, res: InputResolvers): unknown {
+  const fields = res.fieldsForCollection?.(collectionKey) ?? [];
+  return fields.length === 0 ? doc : resolveRecordFields(fields, doc, res);
+}
+
+function resolveReferenceValue(collectionKey: CollectionId, value: unknown, res: InputResolvers): unknown {
+  if (typeof value === "string") return resolveDocFields(collectionKey, res.resolveDoc(collectionKey, value), res);
+  return isRecord(value) ? resolveDocFields(collectionKey, value, res) : value;
+}
+
+function resolveMultiReferenceValue(collectionKey: CollectionId, value: unknown, res: InputResolvers): unknown {
+  if (!Array.isArray(value)) return value;
+  if (value.every((entry) => typeof entry === "string")) {
+    return res.collectionListDocs(collectionKey, value).map((doc) => resolveDocFields(collectionKey, doc, res));
+  }
+  return value.map((entry) => resolveReferenceValue(collectionKey, entry, res));
+}
+
 function resolveNode(type: FieldType, value: unknown, res: InputResolvers): unknown {
   if (value === null || value === undefined) return value;
   switch (type.type) {
+    case "reference":
+      return resolveReferenceValue(type.collectionKey, value, res);
+    case "multiReference":
+      return resolveMultiReferenceValue(type.collectionKey, value, res);
     case "richText":
       return resolveRichTextValue(value, res);
     case "color":
@@ -91,11 +126,5 @@ export function resolveInputValue(
   value: unknown,
   res: InputResolvers,
 ): unknown {
-  if (field.type.type === "reference" && typeof value === "string") {
-    return res.resolveDoc(field.type.collectionKey, value);
-  }
-  if (field.type.type === "multiReference" && Array.isArray(value)) {
-    return res.collectionListDocs(field.type.collectionKey, value as string[]);
-  }
   return resolveNode(field.type, value, res);
 }

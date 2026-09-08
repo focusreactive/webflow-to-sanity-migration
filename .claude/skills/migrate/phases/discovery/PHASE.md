@@ -266,11 +266,10 @@ rendered HTML — leaving the model to decide how much of a 2.8 MB HTML file to
 read. There is also no coverage check possible: the code does not know how many
 sections a route ought to have.
 
-This is a recognised gap, not an oversight. The way out — the model naming a band
-on the screenshot and a script resolving that band to node ids, which makes the
-subject finite, printable inline and checkable — is worked out and measured in
-`docs/investigations/2026-08-30-discovery-frame-resolution.md`. It changes the
-phase's logic and is deliberately deferred.
+This is a recognised gap, not an oversight. The way out is worked out but not
+implemented: the model names a band on the screenshot, and a script resolves that
+band to the node ids inside it, which makes the subject finite, printable inline
+and checkable. It changes the phase's logic and is deliberately deferred.
 
 Two consequences to keep in mind while it stands:
 

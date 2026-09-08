@@ -168,6 +168,25 @@ describe("resolveInputValue", () => {
     ).toEqual([record("a"), record("b")]);
   });
 
+  it("resolves references nested inside an array of groups", () => {
+    expect(
+      resolveInputValue(
+        {
+          name: "cards",
+          type: {
+            type: "array",
+            element: {
+              type: "group",
+              fields: [{ name: "post", type: { type: "reference", collectionKey: POSTS }, required: true }],
+            },
+          },
+        },
+        [{ post: "post-a" }, { post: "post-b" }],
+        resolvers(),
+      ),
+    ).toEqual([{ post: record("post-a") }, { post: record("post-b") }]);
+  });
+
   it("resolves each element of an array field", () => {
     expect(
       resolveInputValue(

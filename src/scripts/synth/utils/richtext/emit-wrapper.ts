@@ -1,4 +1,4 @@
-import { richTextWrapperName } from "./names.ts";
+import { synthRichTextComponentName } from "./names.ts";
 import { SUPPORTED_TAGS } from "./tag-set.ts";
 import type { RichTextStyleTable } from "./types.ts";
 
@@ -15,7 +15,7 @@ function classNamesFor(table: RichTextStyleTable): string[] {
 }
 
 export function emitRichTextWrapper(fieldName: string, table: RichTextStyleTable): string {
-  const name = richTextWrapperName(fieldName);
+  const name = synthRichTextComponentName(fieldName);
   const className = classNamesFor(table).join(" ");
   return `import { PortableText, type PortableTextComponents } from "@portabletext/react";
 import type { PortableTextBlock } from "@portabletext/types";

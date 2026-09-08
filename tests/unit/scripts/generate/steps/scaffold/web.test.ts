@@ -1,8 +1,13 @@
+import { richTextWrapperFile } from "#blocks/codegen/names.ts";
 import { createOverlayDraft } from "#generate/steps/scaffold/overlay.ts";
 import { scaffoldWeb, type WebIr } from "#generate/steps/scaffold/web.ts";
 import { blockTypeSchema } from "#ir/blocks.ts";
 import { collectionEntrySchema } from "#ir/collections.ts";
 import { globalDefSchema } from "#ir/globals.ts";
+import {
+  synthRichTextComponentName,
+  synthRichTextWrapperImport,
+} from "#synth/utils/richtext/names.ts";
 import { designTokensDataSchema } from "#tokens/schemas/design-tokens.ts";
 
 const TOKENS = designTokensDataSchema.parse({
@@ -64,8 +69,14 @@ const header = globalDefSchema.parse({
   values: {},
 });
 
-const BLOCK_COMPONENT =
-  'import RichTextBody from "./richtext/body.tsx";\n\nexport default function HeroBanner() {\n  return <RichTextBody />;\n}\n';
+const BLOCK_COMPONENT = [
+  `import ${synthRichTextComponentName("body")} from "${synthRichTextWrapperImport("body")}";`,
+  "",
+  "export default function HeroBanner() {",
+  `  return <${synthRichTextComponentName("body")} />;`,
+  "}",
+  "",
+].join("\n");
 
 const IR: WebIr = {
   blocks: [{ block, component: BLOCK_COMPONENT, richText: { body: "export default function RichTextBody() {}\n" } }],
@@ -150,8 +161,13 @@ describe("scaffoldWeb", () => {
   it("flattens a block's richText wrapper beside its component and rewrites the import", async () => {
     const { emitted } = await runWeb();
 
-    expect(emitted.has("web/src/components/blocks/hero-banner/rich-text-body.tsx")).toBe(true);
-    expect(text(emitted, "web/src/components/blocks/hero-banner/index.tsx")).toContain('from "./rich-text-body"');
+    expect(emitted.has(`web/src/components/blocks/hero-banner/${richTextWrapperFile("body")}`)).toBe(true);
+    expect(text(emitted, "web/src/components/blocks/hero-banner/index.tsx")).toContain(
+      `from "./${richTextWrapperFile("body").replace(/\.tsx$/, "")}"`,
+    );
+    expect(text(emitted, "web/src/components/blocks/hero-banner/index.tsx")).not.toContain(
+      synthRichTextWrapperImport("body"),
+    );
   });
 
   it("emits one chrome component folder per global", async () => {

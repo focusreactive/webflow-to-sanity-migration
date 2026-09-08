@@ -14,8 +14,7 @@ state by reading `.migration/`, then runs each stage's script in a fixed order.
   `.migration/manifest.json`, `.migration/run-config.json`, and
   `.migration/artifacts/*.json`. These are the source of truth.
 - The skill **never writes** under `.migration/` by hand. Every state change
-  runs a real script (`src/scripts/**/index.ts`, `src/run-config/**/index.ts`)
-  via Bash.
+  runs a real script (`src/scripts/**/index.ts`) via Bash.
 - If a script fails, the fix is another script run with better input — never a
   hand-edit of project files. See the read-only rule below.
 

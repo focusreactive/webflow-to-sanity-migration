@@ -51,8 +51,10 @@ readable — a document titled `hero-photo.jpg` beats one titled by its content 
 ## How does a deduplicated asset become a Sanity image reference?
 
 Sanity addresses an uploaded image by an asset id of the shape `image-<sha>-<width>x<height>-<ext>`.
-This pipeline mints that same shape itself, from the asset record's content SHA-256 and its measured
-width and height, before any file has actually been uploaded to a dataset:
+This pipeline mints that same shape itself, from the asset record's content SHA-256 and its file
+extension, before any file has actually been uploaded to a dataset. The asset record carries no
+measured dimensions, so the width and height slots fall back to `0x0` — the ref is addressed as a
+whole, and the real dimensions arrive with the upload that makes the reference real:
 
 ```ts
 // src/scripts/generate/steps/scaffold/input-value.ts
@@ -68,9 +70,11 @@ rule to reconcile them: hash the uploaded file and match it back to the ref that
 A random or incrementing id would break that link and make every re-run of `generate` non-reproducible.
 
 Before the real dataset exists — while a block's component is still being reviewed against the frozen
-reference — that reference has to resolve to real bytes somewhere. The generated `urlFor()` helper
-parses the synthetic ref back into its SHA and extension and serves it from `/__mig-asset/`, the
-prefix the review harness's asset handler mounts:
+reference — that reference has to resolve to real bytes somewhere. A generated component imports
+`urlFor()` from `@/sanity/image`, which in the deliverable is Sanity's own image-url builder. The
+review harness aliases that import to a stub that parses the synthetic ref back into its SHA and
+extension and points at `/__mig-asset/` — the prefix the harness mounts its asset handler on, which
+looks the SHA up in the media artifact and streams the downloaded file out of the snapshot store:
 
 ```ts
 // src/scripts/generate/steps/scaffold/url-for.ts
@@ -93,6 +97,11 @@ Sanity's CDN existing yet.
   — minting the synthetic image and file references
 - [`src/scripts/generate/steps/scaffold/url-for.ts`](../src/scripts/generate/steps/scaffold/url-for.ts)
   — the asset route prefix and parsing a synthetic ref back into its SHA and extension
+- [`src/scripts/harness/image-stub.ts`](../src/scripts/harness/image-stub.ts) — the `urlFor()` stand-in
+  the harness aliases `@/sanity/image` to
+- [`src/scripts/harness/asset-handler.ts`](../src/scripts/harness/asset-handler.ts) — serving the
+  snapshot bytes for a SHA, mounted on the prefix in
+  [`src/scripts/harness/index.ts`](../src/scripts/harness/index.ts)
 
 ## Related
 

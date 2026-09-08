@@ -1,40 +1,26 @@
+import { resolveInputValue } from "#generate/steps/scaffold/input-value.ts";
+import type { InputResolvers } from "#generate/types.ts";
 import type { BlockField } from "#ir/blocks.ts";
-import {
-  buildDocIndex,
-  buildFieldsIndex,
-  docResolver,
-  fieldsForCollectionResolver,
-  resolveDocRecord,
-  type ResolveDoc,
-} from "./utils/doc-input.ts";
-import {
-  buildAssetSrcIndex,
-  readAssetsData,
-  resolveMediaRecord,
-  type FieldsForCollection,
-} from "./utils/media-input.ts";
 import { writeShardJson, type Vertical } from "#lib/synth-store/paths.ts";
 
 import { inputPath } from "../../constants/paths.ts";
-import { resolveRichTextRecord } from "../../utils/richtext/verify-input.ts";
+
+import { buildDocIndex, buildFieldsIndex, docResolver, fieldsForCollectionResolver } from "./utils/doc-input.ts";
+import { buildAssetMetaIndex, buildAssetSrcIndex, readAssetsData } from "./utils/media-input.ts";
 
 export interface BuildEntityInputOptions {
   fields: BlockField[];
   literals: Record<string, unknown>;
-  resolveAssetSrc: (assetId: string) => string | undefined;
-  resolveDoc: ResolveDoc;
-  fieldsForCollection?: FieldsForCollection;
+  resolvers: InputResolvers;
 }
 
-export async function buildEntityInput(opts: BuildEntityInputOptions): Promise<Record<string, unknown>> {
-  const withDocs = resolveDocRecord(opts.fields, opts.literals, opts.resolveDoc);
-  const withMedia = resolveMediaRecord(
-    opts.fields,
-    withDocs,
-    opts.resolveAssetSrc,
-    opts.fieldsForCollection ?? (() => []),
-  );
-  return resolveRichTextRecord(opts.fields, withMedia, { resolveImgSrc: opts.resolveAssetSrc });
+export function buildEntityInput(opts: BuildEntityInputOptions): Record<string, unknown> {
+  const out: Record<string, unknown> = { ...opts.literals };
+  for (const field of opts.fields) {
+    if (!(field.name in opts.literals)) continue;
+    out[field.name] = resolveInputValue(field, opts.literals[field.name], opts.resolvers);
+  }
+  return out;
 }
 
 export interface WriteEntityInputOptions {
@@ -45,16 +31,31 @@ export interface WriteEntityInputOptions {
   literals: Record<string, unknown>;
 }
 
+export async function buildInputResolvers(
+  projectPath: string,
+  fields: { type: BlockField["type"] }[],
+): Promise<InputResolvers> {
+  const assets = await readAssetsData(projectPath);
+  const srcIndex = buildAssetSrcIndex(projectPath, assets);
+  const metaIndex = buildAssetMetaIndex(assets);
+  const docIndex = await buildDocIndex(projectPath, fields);
+  const fieldsIndex = await buildFieldsIndex(projectPath, fields);
+  const resolveDoc = docResolver(docIndex);
+
+  return {
+    assetSrc: (assetId) => srcIndex.get(assetId),
+    assetMeta: (assetId) => metaIndex.get(assetId),
+    resolveDoc,
+    collectionListDocs: (collectionKey, ids) => ids.map((id) => resolveDoc(collectionKey, id)),
+    fieldsForCollection: fieldsForCollectionResolver(fieldsIndex),
+  };
+}
+
 export async function writeEntityInput(opts: WriteEntityInputOptions): Promise<string> {
-  const srcIndex = buildAssetSrcIndex(opts.projectPath, await readAssetsData(opts.projectPath));
-  const docIndex = await buildDocIndex(opts.projectPath, opts.fields);
-  const fieldsIndex = await buildFieldsIndex(opts.projectPath, opts.fields);
-  const input = await buildEntityInput({
+  const input = buildEntityInput({
     fields: opts.fields,
     literals: opts.literals,
-    resolveAssetSrc: (assetId) => srcIndex.get(assetId),
-    resolveDoc: docResolver(docIndex),
-    fieldsForCollection: fieldsForCollectionResolver(fieldsIndex),
+    resolvers: await buildInputResolvers(opts.projectPath, opts.fields),
   });
   const path = inputPath(opts.projectPath, opts.vertical, opts.entityKey);
   await writeShardJson(path, input);

@@ -1,16 +1,42 @@
 import { describe, expect, it } from "vitest";
 
 import { emitRichTextWrapper } from "#synth/utils/richtext/emit-wrapper.ts";
-import { richTextWrapperImport, richTextWrapperName } from "#synth/utils/richtext/names.ts";
+import {
+  synthRichTextComponentName,
+  synthRichTextImportPattern,
+  synthRichTextWrapperImport,
+  synthRichTextWrapperPath,
+} from "#synth/utils/richtext/names.ts";
 import type { RichTextStyleTable } from "#synth/utils/richtext/types.ts";
 
 describe("names", () => {
   it("PascalCases the slug", () => {
-    expect(richTextWrapperName("body")).toBe("RichTextBody");
-    expect(richTextWrapperName("short-description")).toBe("RichTextShortDescription");
+    expect(synthRichTextComponentName("body")).toBe("RichTextBody");
+    expect(synthRichTextComponentName("short-description")).toBe("RichTextShortDescription");
   });
   it("import path is relative and extensionless", () => {
-    expect(richTextWrapperImport("body")).toBe("./richtext/body");
+    expect(synthRichTextWrapperImport("body")).toBe("./richtext/body");
+  });
+  it("writes the wrapper into the synth richtext subdirectory", () => {
+    expect(synthRichTextWrapperPath("body")).toBe("richtext/body.tsx");
+  });
+});
+
+function fieldsMatchedIn(code: string): (string | undefined)[] {
+  return [...code.matchAll(synthRichTextImportPattern())].map((match) => match[2]);
+}
+
+describe("synthRichTextImportPattern", () => {
+  it("matches the specifier synthRichTextWrapperImport itself produces", () => {
+    expect(fieldsMatchedIn(`import RichTextBody from "${synthRichTextWrapperImport("body")}";`)).toEqual(["body"]);
+  });
+
+  it("matches the same specifier written with the emitted file's extension", () => {
+    expect(fieldsMatchedIn(`import RichTextBody from "./${synthRichTextWrapperPath("body")}";`)).toEqual(["body"]);
+  });
+
+  it("leaves relative imports outside the richtext directory alone", () => {
+    expect(fieldsMatchedIn('import x from "./sibling";\nimport y from "./nested/richtext/body";')).toEqual([]);
   });
 });
 

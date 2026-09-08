@@ -19,11 +19,15 @@ import { PAGE_TREE_ARTIFACT_PATH } from "../../../constants/paths.ts";
 import { buildPageTreeArtifact } from "../page-meta.ts";
 import type { WebBlockEntry, WebCollectionEntry, WebFonts, WebGlobalEntry } from "../web.ts";
 
+function isFileMissing(error: unknown): boolean {
+  return error !== null && typeof error === "object" && "code" in error && error.code === "ENOENT";
+}
+
 export async function readOptional<T>(reader: () => Promise<{ data: T }>): Promise<T | undefined> {
   try {
     return (await reader()).data;
   } catch (error) {
-    if (error && typeof error === "object" && "code" in error && error.code === "ENOENT") return undefined;
+    if (isFileMissing(error)) return undefined;
     throw error;
   }
 }
@@ -121,7 +125,8 @@ export async function writePageTreeArtifact(opts: {
   for (const route of staticRoutes) {
     try {
       await readNdjsonArtifact(opts.projectPath, layoutRouteArtifactFor(routeDir(route)));
-    } catch {
+    } catch (error) {
+      if (!isFileMissing(error)) throw error;
       opts.warn(`static route "${route}": layout/routes artifact missing — the page will be seeded with no content`);
     }
   }

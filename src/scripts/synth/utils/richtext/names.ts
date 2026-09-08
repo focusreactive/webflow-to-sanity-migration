@@ -1,3 +1,5 @@
+export const SYNTH_RICHTEXT_DIR = "richtext";
+
 function pascalCase(name: string): string {
   return name
     .split(/[^a-z0-9]+/i)
@@ -6,14 +8,18 @@ function pascalCase(name: string): string {
     .join("");
 }
 
-export function richTextWrapperName(name: string): string {
+export function synthRichTextComponentName(name: string): string {
   return `RichText${pascalCase(name)}`;
 }
 
-export function richTextWrapperFile(name: string): string {
-  return `richtext/${name}.tsx`;
+export function synthRichTextWrapperPath(name: string): string {
+  return `${SYNTH_RICHTEXT_DIR}/${name}.tsx`;
 }
 
-export function richTextWrapperImport(name: string): string {
-  return `./richtext/${name}`;
+export function synthRichTextWrapperImport(name: string): string {
+  return `./${SYNTH_RICHTEXT_DIR}/${name}`;
+}
+
+export function synthRichTextImportPattern(): RegExp {
+  return new RegExp(String.raw`(from\s+["'])\./${SYNTH_RICHTEXT_DIR}/([^"'/]+?)(?:\.tsx?)?(["'])`, "g");
 }
