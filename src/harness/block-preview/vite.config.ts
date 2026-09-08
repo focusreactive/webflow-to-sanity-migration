@@ -68,6 +68,7 @@ export default defineConfig({
     alias: {
       "#site-theme": join(artifacts, "theme.css"),
       "#site-fonts": existsSync(snapshotFontsCss) ? snapshotFontsCss : join(here, "fonts-fallback.css"),
+      "@/sanity/image": join(here, "../../scripts/harness/image-stub.ts"),
       ...runtimeAliases(),
     },
   },
