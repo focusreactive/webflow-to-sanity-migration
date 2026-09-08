@@ -1,0 +1,120 @@
+# Webflow asset URLs to Sanity image assets
+
+The same image on a Webflow site appears under many URLs: on four different CDN hostnames, with
+cache-busting query strings, and in up to seven generated width variants. Turning those URLs into
+Sanity image assets one-for-one would mint a reference for every variant of every photograph.
+Collapsing them correctly takes three separate steps — canonicalising the URL, discarding generated
+variants, and de-duplicating by content hash — because each catches duplicates the others cannot
+see. Only once one URL survives per real image does minting a Sanity reference make sense.
+
+## Which hostnames serve the same asset?
+
+Four hosts serve Webflow asset paths, and they are interchangeable for a given path:
+
+- `cdn.prod.website-files.com` — the current one, used as canonical
+- `assets.website-files.com`
+- `assets-global.website-files.com`
+- `uploads-ssl.webflow.com`
+
+Canonicalising means rewriting any of the aliases to `cdn.prod.website-files.com` and **dropping the
+query string entirely**, since it only ever carries cache-busting parameters. One more fix applies
+to every URL regardless of host: `%2f` sequences in the path are decoded back to `/`, because they
+appear inconsistently and would otherwise split one asset into two.
+
+## Which URLs are generated variants rather than assets?
+
+Webflow generates responsive copies of an uploaded image and names them by appending `-p-<width>`
+before the extension:
+
+```
+6098…_photo.jpg          ← the original
+6098…_photo-p-500.jpeg   ← generated
+6098…_photo-p-1600.jpeg  ← generated
+```
+
+The widths are drawn from a fixed set: **500, 800, 1080, 1600, 2000, 2600, 3200**. Matching the
+`-p-<number>` suffix alone is not enough — a file legitimately named `chart-p-42.png` would be
+mistaken for a variant — so the number has to be checked against that set.
+
+Variant references are skipped before anything is fetched. Only the original is downloaded, and any
+later reference to a variant URL resolves to the original's id by canonicalising it the same way.
+Practically, this means a `srcset` of seven URLs contributes exactly one asset.
+
+## What does the filename carry?
+
+The last path segment of a canonical URL is `<24-hex platform id>_<original file name>` — Webflow's
+own asset id, an underscore, then the name the file had before it was uploaded. Both halves are kept:
+the 24-hex prefix survives as the asset's `platformId`, and the remainder, sanitised, survives as its
+`originalName`. Neither is required for the asset to work, but both make the studio's media browser
+readable — a document titled `hero-photo.jpg` beats one titled by its content hash.
+
+## How does a deduplicated asset become a Sanity image reference?
+
+Sanity addresses an uploaded image by an asset id of the shape `image-<sha>-<width>x<height>-<ext>`.
+This pipeline mints that same shape itself, from the asset record's content SHA-256 and its measured
+width and height, before any file has actually been uploaded to a dataset:
+
+```ts
+// src/scripts/generate/steps/scaffold/input-value.ts
+export function syntheticAssetRef(meta: { sha: string; width?: number; height?: number; ext: string }): string {
+  return `image-${meta.sha}-${String(meta.width ?? 0)}x${String(meta.height ?? 0)}-${meta.ext}`;
+}
+```
+
+That ref has to be **deterministic**: the same source image always produces the same ref, on this run
+and on the next one. Every field that points at an image — an image field, a rich-text `<img>` — is
+resolved to this same synthetic reference independently, so a real upload step only has to know one
+rule to reconcile them: hash the uploaded file and match it back to the ref that was minted for it.
+A random or incrementing id would break that link and make every re-run of `generate` non-reproducible.
+
+Before the real dataset exists — while a block's component is still being reviewed against the frozen
+reference — that reference has to resolve to real bytes somewhere. The generated `urlFor()` helper
+parses the synthetic ref back into its SHA and extension and serves it from `/__mig-asset/`, the
+prefix the review harness's asset handler mounts:
+
+```ts
+// src/scripts/generate/steps/scaffold/url-for.ts
+export const SANITY_ASSET_ROUTE_PREFIX = "/__mig-asset/";
+const IMAGE_REF = /^image-([a-f0-9]+)-\d+x\d+-([a-z0-9]+)$/;
+```
+
+So a component under review renders the actual migrated image, addressed exactly the way it will be
+once the asset is uploaded and the reference becomes real — no placeholder, and no dependency on
+Sanity's CDN existing yet.
+
+## Source in this repository
+
+- [`src/adapters/webflow/media-normalize.ts`](../src/adapters/webflow/media-normalize.ts) — host
+  aliases, variant widths, the 24-hex prefix
+- [`src/scripts/assets/steps/media/utils/build-media-assets.ts`](../src/scripts/assets/steps/media/utils/build-media-assets.ts)
+  — grouping, download, content de-duplication
+- [`src/ir/assets.ts`](../src/ir/assets.ts) — the asset record and the list of reference sources
+- [`src/scripts/generate/steps/scaffold/input-value.ts`](../src/scripts/generate/steps/scaffold/input-value.ts)
+  — minting the synthetic image and file references
+- [`src/scripts/generate/steps/scaffold/url-for.ts`](../src/scripts/generate/steps/scaffold/url-for.ts)
+  — the asset route prefix and parsing a synthetic ref back into its SHA and extension
+
+## Related
+
+- [Reading a Webflow content model from a published site](read-webflow-content-model-from-published-site.md)
+  — how these same canonical URLs are found in the first place
+- [Webflow sections to Sanity blocks](webflow-sections-to-sanity-blocks.md) — how fields point at
+  image and file assets
+
+---
+
+## 🚀 Need Help with Headless CMS Migration?
+
+This repository is maintained by [FocusReactive](https://focusreactive.com) — a specialized Next.js and Headless CMS migration agency.
+
+We help enterprise businesses migrate from legacy monoliths (WordPress, Drupal, Sitecore) and visual builders (Webflow, Framer) to modern stacks like Sanity, Payload CMS, Storyblok, and MedusaJS.
+
+The pipeline in this repository is one path out of that matrix, published in full. The internal version of the same tooling covers the others — if your migration path isn't Webflow → Payload, ask us about it.
+
+### Why FocusReactive?
+
+- **Expertise:** Verified Sanity, Payload, and Storyblok partners.
+- **Speed:** We use our proprietary [CMS Kit](https://github.com/focusreactive/cms-kit) to speed up migrations by 40%.
+- **SEO & Performance:** Zero downtime migrations with 100/100 Lighthouse scores.
+
+👉 **[Get a Free Migration Consultation](https://focusreactive.com/services/headless-cms-expert-agency/)** or contact us at contact@focusreactive.com.
