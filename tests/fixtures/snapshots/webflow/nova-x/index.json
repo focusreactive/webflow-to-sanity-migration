@@ -1,0 +1,204 @@
+{
+  "schemaVersion": 2,
+  "entries": {
+    "https://nova-x.webflow.io/robots.txt": {
+      "url": "https://nova-x.webflow.io/robots.txt",
+      "kind": "probe",
+      "paths": {
+        "raw": "probe/robots.txt"
+      },
+      "http": {
+        "status": 200,
+        "finalUrl": "https://nova-x.webflow.io/robots.txt",
+        "redirectChain": [],
+        "contentType": "text/plain; charset=utf-8",
+        "lastModified": "Tue, 08 Sep 2026 12:16:15 GMT"
+      },
+      "sha256": "efdb5938a9736727f5cce2b60355588e4fa541d19d022d222d8a09b8efd5dcce",
+      "size": 25,
+      "fetchedAt": "2026-09-08T12:16:15.765Z"
+    },
+    "https://nova-x.webflow.io/": {
+      "url": "https://nova-x.webflow.io/",
+      "kind": "page",
+      "paths": {
+        "raw": "probe/home.html",
+        "rendered": "probe/index.rendered.html",
+        "styles": "probe/index.styles.json"
+      },
+      "http": {
+        "status": 200,
+        "finalUrl": "https://nova-x.webflow.io/",
+        "redirectChain": [],
+        "contentType": "text/html; charset=utf-8",
+        "lastModified": "Tue, 08 Sep 2026 12:16:17 GMT"
+      },
+      "sha256": "ef5970ce7a9b79180015d83953028eee8fe53945d7ea7395509454a2fc68f423",
+      "size": 77495,
+      "fetchedAt": "2026-09-08T12:16:17.055Z"
+    },
+    "https://nova-x.webflow.io/sitemap.xml": {
+      "url": "https://nova-x.webflow.io/sitemap.xml",
+      "kind": "probe",
+      "paths": {
+        "raw": "probe/sitemap.xml"
+      },
+      "http": {
+        "status": 200,
+        "finalUrl": "https://nova-x.webflow.io/sitemap.xml",
+        "redirectChain": [],
+        "contentType": "application/rss+xml; charset=utf-8",
+        "lastModified": "Tue, 08 Sep 2026 12:16:17 GMT"
+      },
+      "sha256": "e2848dc62dbd04a8f955edbaea46ae542ecea485aa777df9fe9d8184583133eb",
+      "size": 1109,
+      "fetchedAt": "2026-09-08T12:16:17.567Z"
+    },
+    "https://nova-x.webflow.io/__migration-probe-404__": {
+      "url": "https://nova-x.webflow.io/__migration-probe-404__",
+      "kind": "probe",
+      "paths": {
+        "raw": "probe/not-found.html"
+      },
+      "http": {
+        "status": 404,
+        "finalUrl": "https://nova-x.webflow.io/__migration-probe-404__",
+        "redirectChain": [],
+        "contentType": "text/html; charset=utf-8",
+        "etag": "W/\"2613b61a6f95c793ee22dc2482344052\"",
+        "lastModified": "Thu, 09 May 2024 16:10:47 GMT"
+      },
+      "sha256": "aa32f6be2cd17e2c39b79125963bcc4a361515798a41ac5a027bc35747b38ff3",
+      "size": 2732,
+      "fetchedAt": "2026-09-08T12:16:18.182Z"
+    },
+    "https://nova-x.webflow.io/case-studies": {
+      "url": "https://nova-x.webflow.io/case-studies",
+      "kind": "page",
+      "paths": {
+        "raw": "pages/case-studies/index.html",
+        "rendered": "pages/case-studies/index.rendered.html",
+        "styles": "pages/case-studies/index.styles.json"
+      },
+      "http": {
+        "status": 200,
+        "finalUrl": "https://nova-x.webflow.io/case-studies",
+        "redirectChain": [],
+        "contentType": "text/html; charset=utf-8",
+        "lastModified": "Tue, 08 Sep 2026 12:16:28 GMT"
+      },
+      "sha256": "1d1b68a6e61170e9df5daa7ef7aea4f065dd2024bd3bd18831e91bd5a899c166",
+      "size": 26903,
+      "fetchedAt": "2026-09-08T12:16:28.730Z"
+    },
+    "https://nova-x.webflow.io/case-studies/brewzen-coffee-retailer": {
+      "url": "https://nova-x.webflow.io/case-studies/brewzen-coffee-retailer",
+      "kind": "page",
+      "paths": {
+        "raw": "pages/case-studies/brewzen-coffee-retailer/index.html",
+        "rendered": "pages/case-studies/brewzen-coffee-retailer/index.rendered.html",
+        "styles": "pages/case-studies/brewzen-coffee-retailer/index.styles.json"
+      },
+      "http": {
+        "status": 200,
+        "finalUrl": "https://nova-x.webflow.io/case-studies/brewzen-coffee-retailer",
+        "redirectChain": [],
+        "contentType": "text/html; charset=utf-8",
+        "lastModified": "Tue, 08 Sep 2026 12:16:33 GMT"
+      },
+      "sha256": "dfbf338b7f088b2c03aebbdb648d1cc9525288b811c4f3f47e9d80b67df3a86a",
+      "size": 29558,
+      "fetchedAt": "2026-09-08T12:16:33.584Z"
+    },
+    "https://nova-x.webflow.io/case-studies/burgerhaven-restaurant": {
+      "url": "https://nova-x.webflow.io/case-studies/burgerhaven-restaurant",
+      "kind": "page",
+      "paths": {
+        "raw": "pages/case-studies/burgerhaven-restaurant/index.html",
+        "rendered": "pages/case-studies/burgerhaven-restaurant/index.rendered.html",
+        "styles": "pages/case-studies/burgerhaven-restaurant/index.styles.json"
+      },
+      "http": {
+        "status": 200,
+        "finalUrl": "https://nova-x.webflow.io/case-studies/burgerhaven-restaurant",
+        "redirectChain": [],
+        "contentType": "text/html; charset=utf-8",
+        "lastModified": "Tue, 08 Sep 2026 12:16:34 GMT"
+      },
+      "sha256": "9711372caef3c77509c887580c5b44d2f7b7cd35a6b55b43e516ff0152c30a8b",
+      "size": 29129,
+      "fetchedAt": "2026-09-08T12:16:34.055Z"
+    },
+    "https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js": {
+      "url": "https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js",
+      "kind": "script",
+      "paths": {
+        "raw": "scripts/webfont.js"
+      },
+      "http": {
+        "status": 200,
+        "finalUrl": "https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js",
+        "redirectChain": [],
+        "contentType": "text/javascript; charset=UTF-8",
+        "lastModified": "Tue, 03 Mar 2020 19:15:00 GMT"
+      },
+      "sha256": "81016ac6be850b72df5d4faa0c3cec8e2c1b0ba0045712144a6766adfad40bee",
+      "size": 13188,
+      "fetchedAt": "2026-09-08T12:22:13.341Z"
+    },
+    "https://assets-global.website-files.com/66386a9c5a29d081bf4e6f52/css/nova-x.webflow.8bca0d97c.min.css": {
+      "url": "https://assets-global.website-files.com/66386a9c5a29d081bf4e6f52/css/nova-x.webflow.8bca0d97c.min.css",
+      "kind": "style",
+      "paths": {
+        "raw": "styles/nova-x.webflow.8bca0d97c.min.css"
+      },
+      "http": {
+        "status": 200,
+        "finalUrl": "https://assets-global.website-files.com/66386a9c5a29d081bf4e6f52/css/nova-x.webflow.8bca0d97c.min.css",
+        "redirectChain": [],
+        "contentType": "text/css",
+        "etag": "\"8a8e6aa5f5e2f2c1133d6396d7fdcb2a\"",
+        "lastModified": "Thu, 09 May 2024 16:10:47 GMT"
+      },
+      "sha256": "996d0699ea2e308cb902cdefd86958785fde17d01152a6438a8bad010b8d270e",
+      "size": 99991,
+      "fetchedAt": "2026-09-08T12:22:14.049Z"
+    },
+    "https://assets-global.website-files.com/66386a9c5a29d081bf4e6f52/js/webflow.b1c51165a.js": {
+      "url": "https://assets-global.website-files.com/66386a9c5a29d081bf4e6f52/js/webflow.b1c51165a.js",
+      "kind": "script",
+      "paths": {
+        "raw": "scripts/webflow.b1c51165a.js"
+      },
+      "http": {
+        "status": 200,
+        "finalUrl": "https://assets-global.website-files.com/66386a9c5a29d081bf4e6f52/js/webflow.b1c51165a.js",
+        "redirectChain": [],
+        "contentType": "text/javascript",
+        "etag": "\"77725f7661643080c0db8104b5dbc3be\"",
+        "lastModified": "Thu, 09 May 2024 16:10:47 GMT"
+      },
+      "sha256": "8d1f52ca94418de12bcb790b9fea9407bbaa64d0ade1c2449975fa235090d7ec",
+      "size": 318312,
+      "fetchedAt": "2026-09-08T12:22:14.545Z"
+    },
+    "https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=66386a9c5a29d081bf4e6f52": {
+      "url": "https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=66386a9c5a29d081bf4e6f52",
+      "kind": "script",
+      "paths": {
+        "raw": "scripts/jquery-3.5.1.min.dc5e7f18c8.js"
+      },
+      "http": {
+        "status": 200,
+        "finalUrl": "https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=66386a9c5a29d081bf4e6f52",
+        "redirectChain": [],
+        "contentType": "application/javascript",
+        "etag": "W/\"dc5e7f18c8d36ac1d3d4753a87c98d0a\"",
+        "lastModified": "Mon, 20 Jul 2020 17:53:02 GMT"
+      },
+      "sha256": "f7f6a5894f1d19ddad6fa392b2ece2c5e578cbf7da4ea805b6885eb6985b6e3d",
+      "size": 89476,
+      "fetchedAt": "2026-09-08T12:22:15.922Z"
+    }
+  }
+}

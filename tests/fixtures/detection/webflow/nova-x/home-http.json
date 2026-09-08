@@ -1,0 +1,25 @@
+{
+  "status": 200,
+  "finalUrl": "https://nova-x.webflow.io/",
+  "redirectChain": [],
+  "headers": {
+    "age": "329",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cf-cache-status": "HIT",
+    "cf-ray": "a37dea3839869208-FRA",
+    "connection": "keep-alive",
+    "content-encoding": "gzip",
+    "content-security-policy": "frame-ancestors 'self' https://*.webflow.com http://*.webflow.com http://*.webflow.io http://webflow.com https://webflow.com",
+    "content-type": "text/html; charset=utf-8",
+    "date": "Tue, 08 Sep 2026 12:21:46 GMT",
+    "last-modified": "Tue, 08 Sep 2026 12:16:17 GMT",
+    "server": "cloudflare",
+    "set-cookie": "_cfuvid=QGu391tN3x1.kgDv3gBSKlaiTqGDn_wxsaiW_Ydr_9A-1788870106.920585-1.0.1.1-y6HKpQJaf_bG1D6HnMnuX94GYfZUN9xwH22LpXzuUJc; HttpOnly; SameSite=None; Secure; Path=/; Domain=webflow.io",
+    "surrogate-control": "max-age=432000",
+    "surrogate-key": "nova-x.webflow.io 66386a9c5a29d081bf4e6f52 pageId:66386a9c5a29d081bf4e6f56 66386a9c5a29d081bf4e6f93 66386a9c5a29d081bf4e6f7a",
+    "transfer-encoding": "chunked",
+    "vary": "accept-encoding",
+    "x-lambda-id": "4cd55d81-41d6-464c-aedd-61c4dd91ea62",
+    "x-wf-region": "us-east-1"
+  }
+}

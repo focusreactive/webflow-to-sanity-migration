@@ -1,0 +1,232 @@
+{
+  "pages": [
+    {
+      "route": "/",
+      "kind": "static",
+      "localeId": "en",
+      "sources": [
+        "sitemap",
+        "crawl"
+      ]
+    },
+    {
+      "route": "/about-us",
+      "kind": "static",
+      "localeId": "en",
+      "sources": [
+        "sitemap",
+        "crawl"
+      ]
+    },
+    {
+      "route": "/blog/aspernatur-sed",
+      "kind": "item",
+      "collectionKey": "66386a9c5a29d081bf4e6fab",
+      "slug": "aspernatur-sed",
+      "localeId": "en",
+      "sources": [
+        "crawl"
+      ]
+    },
+    {
+      "route": "/blog/autem-voluptate-similique",
+      "kind": "item",
+      "collectionKey": "66386a9c5a29d081bf4e6fab",
+      "slug": "autem-voluptate-similique",
+      "localeId": "en",
+      "sources": [
+        "crawl"
+      ]
+    },
+    {
+      "route": "/blog/nostrum-corporis",
+      "kind": "item",
+      "collectionKey": "66386a9c5a29d081bf4e6fab",
+      "slug": "nostrum-corporis",
+      "localeId": "en",
+      "sources": [
+        "crawl"
+      ]
+    },
+    {
+      "route": "/blog/personalization-email-marketing",
+      "kind": "item",
+      "collectionKey": "66386a9c5a29d081bf4e6fab",
+      "slug": "personalization-email-marketing",
+      "localeId": "en",
+      "sources": [
+        "crawl"
+      ]
+    },
+    {
+      "route": "/blog/quam-itaque",
+      "kind": "item",
+      "collectionKey": "66386a9c5a29d081bf4e6fab",
+      "slug": "quam-itaque",
+      "localeId": "en",
+      "sources": [
+        "crawl"
+      ]
+    },
+    {
+      "route": "/blog/social-commerce",
+      "kind": "item",
+      "collectionKey": "66386a9c5a29d081bf4e6fab",
+      "slug": "social-commerce",
+      "localeId": "en",
+      "sources": [
+        "crawl"
+      ]
+    },
+    {
+      "route": "/blogs",
+      "kind": "static",
+      "localeId": "en",
+      "sources": [
+        "sitemap",
+        "crawl"
+      ]
+    },
+    {
+      "route": "/case-studies",
+      "kind": "static",
+      "localeId": "en",
+      "sources": [
+        "sitemap",
+        "crawl"
+      ]
+    },
+    {
+      "route": "/case-studies/brewzen-coffee-retailer",
+      "kind": "item",
+      "collectionKey": "66386a9c5a29d081bf4e6f7a",
+      "slug": "brewzen-coffee-retailer",
+      "localeId": "en",
+      "sources": [
+        "crawl"
+      ]
+    },
+    {
+      "route": "/case-studies/burgerhaven-restaurant",
+      "kind": "item",
+      "collectionKey": "66386a9c5a29d081bf4e6f7a",
+      "slug": "burgerhaven-restaurant",
+      "localeId": "en",
+      "sources": [
+        "crawl"
+      ]
+    },
+    {
+      "route": "/case-studies/fizzpop-drinks",
+      "kind": "item",
+      "collectionKey": "66386a9c5a29d081bf4e6f7a",
+      "slug": "fizzpop-drinks",
+      "localeId": "en",
+      "sources": [
+        "crawl"
+      ]
+    },
+    {
+      "route": "/case-studies/glowessence-skincare",
+      "kind": "item",
+      "collectionKey": "66386a9c5a29d081bf4e6f7a",
+      "slug": "glowessence-skincare",
+      "localeId": "en",
+      "sources": [
+        "crawl"
+      ]
+    },
+    {
+      "route": "/contact",
+      "kind": "static",
+      "localeId": "en",
+      "sources": [
+        "sitemap",
+        "crawl"
+      ]
+    },
+    {
+      "route": "/services",
+      "kind": "static",
+      "localeId": "en",
+      "sources": [
+        "sitemap",
+        "crawl"
+      ]
+    },
+    {
+      "route": "/services/digital-advertising",
+      "kind": "item",
+      "collectionKey": "66386a9c5a29d081bf4e6f93",
+      "slug": "digital-advertising",
+      "localeId": "en",
+      "sources": [
+        "crawl"
+      ]
+    },
+    {
+      "route": "/services/engagement-growth",
+      "kind": "item",
+      "collectionKey": "66386a9c5a29d081bf4e6f93",
+      "slug": "engagement-growth",
+      "localeId": "en",
+      "sources": [
+        "crawl"
+      ]
+    },
+    {
+      "route": "/services/social-media-marketing",
+      "kind": "item",
+      "collectionKey": "66386a9c5a29d081bf4e6f93",
+      "slug": "social-media-marketing",
+      "localeId": "en",
+      "sources": [
+        "crawl"
+      ]
+    },
+    {
+      "route": "/utility-pages/changelog",
+      "kind": "static",
+      "localeId": "en",
+      "sources": [
+        "sitemap",
+        "crawl"
+      ]
+    },
+    {
+      "route": "/utility-pages/licenses",
+      "kind": "static",
+      "localeId": "en",
+      "sources": [
+        "sitemap",
+        "crawl"
+      ]
+    },
+    {
+      "route": "/utility-pages/style-guide",
+      "kind": "static",
+      "localeId": "en",
+      "sources": [
+        "sitemap",
+        "crawl"
+      ]
+    }
+  ],
+  "collections": [
+    {
+      "key": "66386a9c5a29d081bf4e6f7a",
+      "routePattern": "/case-studies/:slug",
+      "itemCount": 4
+    },
+    {
+      "key": "66386a9c5a29d081bf4e6f93",
+      "routePattern": "/services/:slug",
+      "itemCount": 3
+    },
+    {
+      "key": "66386a9c5a29d081bf4e6fab",
+      "routePattern": "/blog/:slug",
+      "itemCount": 6
+    }
+  ]
+}
