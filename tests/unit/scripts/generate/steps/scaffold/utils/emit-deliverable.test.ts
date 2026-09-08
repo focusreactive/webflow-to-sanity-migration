@@ -9,8 +9,9 @@ import {
   loadWebGlobals,
   readOptional,
 } from "#generate/steps/scaffold/utils/emit-deliverable.ts";
+import { artifactPath, readArtifact } from "#ir/artifact.ts";
 import { blockTypeSchema } from "#ir/blocks.ts";
-import { collectionEntrySchema } from "#ir/collections.ts";
+import { collectionEntrySchema, collectionsArtifact } from "#ir/collections.ts";
 import { globalDefSchema } from "#ir/globals.ts";
 import { FONT_ASSETS_DIR, FONTS_CSS_RELATIVE_PATH } from "#lib/snapshot-store/fonts.ts";
 import { SNAPSHOT_DIR } from "#lib/snapshot-store/paths.ts";
@@ -134,8 +135,42 @@ describe("loadWebFonts", () => {
 });
 
 describe("readOptional", () => {
-  it("returns the data when the reader resolves and undefined when it throws", async () => {
+  it("returns the data when the reader resolves", async () => {
     expect(await readOptional(() => Promise.resolve({ data: 1 }))).toBe(1);
-    expect(await readOptional(() => Promise.reject(new Error("no artifact")))).toBeUndefined();
+  });
+
+  it("returns undefined when the artifact file genuinely does not exist (ENOENT)", async () => {
+    const projectPath = await project();
+
+    expect(await readOptional(() => readArtifact(projectPath, collectionsArtifact))).toBeUndefined();
+  });
+
+  it("does not swallow malformed JSON in a present artifact", async () => {
+    const projectPath = await project();
+    await mkdir(join(projectPath, ".migration", "artifacts"), { recursive: true });
+    await writeFile(artifactPath(projectPath, collectionsArtifact), "{ not valid json");
+
+    await expect(readOptional(() => readArtifact(projectPath, collectionsArtifact))).rejects.toThrow();
+  });
+
+  it("does not swallow a schemaVersion mismatch in a present artifact", async () => {
+    const projectPath = await project();
+    await mkdir(join(projectPath, ".migration", "artifacts"), { recursive: true });
+    await writeFile(
+      artifactPath(projectPath, collectionsArtifact),
+      JSON.stringify({
+        schemaVersion: collectionsArtifact.schemaVersion + 1,
+        provenance: {},
+        data: { collections: [] },
+      }),
+    );
+
+    await expect(readOptional(() => readArtifact(projectPath, collectionsArtifact))).rejects.toThrow(
+      /schemaVersion/,
+    );
+  });
+
+  it("rethrows an error that carries no ENOENT code rather than swallowing it", async () => {
+    await expect(readOptional(() => Promise.reject(new Error("no artifact")))).rejects.toThrow("no artifact");
   });
 });
