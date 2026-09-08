@@ -24,9 +24,6 @@ export async function readOptional<T>(reader: () => Promise<{ data: T }>): Promi
     return (await reader()).data;
   } catch (error) {
     if (error && typeof error === "object" && "code" in error && error.code === "ENOENT") return undefined;
-    // A malformed artifact, a schema-version mismatch, or a validation failure is a real bug in a
-    // present artifact, not an absent one — fail loudly here just like loadWebBlocks/loadWebGlobals
-    // do for a missing Component.tsx, rather than silently emitting a deliverable with a hole in it.
     throw error;
   }
 }
