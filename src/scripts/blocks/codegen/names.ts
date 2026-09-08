@@ -1,7 +1,7 @@
 import { type BlockTypeId } from "#ir/common.ts";
 
 function ensureValidIdentifierStart(value: string): string {
-  return /^[0-9]/.test(value) ? `_${value}` : value;
+  return /^[0-9]/.test(value) ? `T${value}` : value;
 }
 
 export function blockComponentName(id: BlockTypeId): string {

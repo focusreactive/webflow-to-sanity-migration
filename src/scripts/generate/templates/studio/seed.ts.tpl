@@ -336,14 +336,16 @@ async function main(): Promise<void> {
   );
   const assets = (await readEnvelope<{ assets: AssetRecord[] }>("assets/media.json"))?.assets ?? [];
 
-  let pageNodes: PageNode[] = [];
+  let pageNodes: PageNode[];
   try {
     const raw = JSON.parse(await readFile(path.join(ARTIFACTS_DIR, "generate", "page-tree.json"), "utf8")) as {
       nodes: PageNode[];
     };
     pageNodes = raw.nodes;
   } catch {
-    warn("generate/page-tree.json is missing — no pages seeded");
+    throw new Error(
+      "generate/page-tree.json is missing — run generate:scaffold before seeding, or pages would be silently omitted",
+    );
   }
 
   const layoutFiles: { route: string; records: BlockRecord[] }[] = [];
