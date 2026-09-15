@@ -120,21 +120,3 @@ TypeScript type for its result. Skipping it would leave every query's result typ
   — what a block's component is authored against
 - [Webflow asset URLs to Sanity image assets](webflow-asset-urls-to-sanity-image-assets.md) — how an
   `<img>` inside rich text resolves to an asset reference
-
----
-
-## 🚀 Need Help with Headless CMS Migration?
-
-This repository is maintained by [FocusReactive](https://focusreactive.com) — a specialized Next.js and Headless CMS migration agency.
-
-We help enterprise businesses migrate from legacy monoliths (WordPress, Drupal, Sitecore) and visual builders (Webflow, Framer) to modern stacks like Sanity, Payload CMS, Storyblok, and MedusaJS.
-
-The pipeline in this repository is one path out of that matrix, published in full. The internal version of the same tooling covers the others — if your migration path isn't Webflow → Payload, ask us about it.
-
-### Why FocusReactive?
-
-- **Expertise:** Verified Sanity, Payload, and Storyblok partners.
-- **Speed:** We use our proprietary [CMS Kit](https://github.com/focusreactive/cms-kit) to speed up migrations by 40%.
-- **SEO & Performance:** Zero downtime migrations with 100/100 Lighthouse scores.
-
-👉 **[Get a Free Migration Consultation](https://focusreactive.com/services/headless-cms-expert-agency/)** or contact us at contact@focusreactive.com.

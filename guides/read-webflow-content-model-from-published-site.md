@@ -54,21 +54,3 @@ a silent merge.
   runs before this
 - [Webflow sections to Sanity blocks](webflow-sections-to-sanity-blocks.md) — where these
   collections and routes end up
-
----
-
-## 🚀 Need Help with Headless CMS Migration?
-
-This repository is maintained by [FocusReactive](https://focusreactive.com) — a specialized Next.js and Headless CMS migration agency.
-
-We help enterprise businesses migrate from legacy monoliths (WordPress, Drupal, Sitecore) and visual builders (Webflow, Framer) to modern stacks like Sanity, Payload CMS, Storyblok, and MedusaJS.
-
-The pipeline in this repository is one path out of that matrix, published in full. The internal version of the same tooling covers the others — if your migration path isn't Webflow → Payload, ask us about it.
-
-### Why FocusReactive?
-
-- **Expertise:** Verified Sanity, Payload, and Storyblok partners.
-- **Speed:** We use our proprietary [CMS Kit](https://github.com/focusreactive/cms-kit) to speed up migrations by 40%.
-- **SEO & Performance:** Zero downtime migrations with 100/100 Lighthouse scores.
-
-👉 **[Get a Free Migration Consultation](https://focusreactive.com/services/headless-cms-expert-agency/)** or contact us at contact@focusreactive.com.
